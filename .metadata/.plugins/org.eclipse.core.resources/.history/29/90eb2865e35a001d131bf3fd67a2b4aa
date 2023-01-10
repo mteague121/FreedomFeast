@@ -1,0 +1,85 @@
+package com.kitchen;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.notNull;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
+import java.util.*;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.util.Assert;
+
+import com.kitchen.models.*;
+import com.kitchen.repositories.KitchenRepo;
+import com.kitchen.services.*;
+
+@ExtendWith(MockitoExtension.class)
+@Configuration
+@EnableJpaRepositories
+public class RepositoryTests {
+	
+	private List<Kitchen> kitchenTests;
+	
+	@Mock
+	KitchenRepo kitchenRepo;
+	
+	private Kitchen generateRandomKitchen(long id) {
+		String names[] = {"Big Kitches", "Smoke shack", "Lil fishies", "Le Front"};
+		String passwords[] = {"bigword4", "bigword5", "bigword64", "bigword1"};
+		String workdays[] = {"M-F", "Tu-Sat", "Everyday", "Th-M"};
+		String worktimes[] = {"10AM-10PM", "7AM-11PM", "24H", "1PM-3AM"};
+		Random rand = new Random();
+		Kitchen kitchen = new Kitchen(id, names[rand.nextInt(0, names.length)], "test@test.test",
+		 passwords[rand.nextInt(0, passwords.length)], workdays[rand.nextInt(0, workdays.length)],
+		 worktimes[rand.nextInt(0, worktimes.length)], "test", null);
+		System.out.println("Created: " + kitchen);
+		return kitchen;
+	}
+	
+	private List<Kitchen> generateKitchens() {
+		List<Kitchen> kitchens = new ArrayList<Kitchen>();
+		kitchens.add(generateRandomKitchen(1));
+		kitchens.add(generateRandomKitchen(2));
+		kitchens.add(generateRandomKitchen(3));
+		kitchens.add(generateRandomKitchen(4));
+		return kitchens;
+	}
+	
+	@BeforeEach
+	public void repoSetup() {
+		List<Kitchen> kitchens = generateKitchens();
+		kitchenTests = kitchens;
+	}
+	
+	@Test
+	public void performKitchenLogic() {
+		when(kitchenRepo.getKitchenById(1)).thenReturn(kitchenTests.get(0));
+		when(kitchenRepo.getKitchenById(2)).thenReturn(kitchenTests.get(1));
+		when(kitchenRepo.getKitchenById(3)).thenReturn(kitchenTests.get(2));
+		when(kitchenRepo.getKitchenById(4)).thenReturn(kitchenTests.get(3));
+		when(kitchenRepo.save(any())).thenAnswer(AdditionalAnswers.returnsFirstArg());
+		Kitchen kitchen1 = kitchenRepo.getKitchenById(1);
+		Kitchen kitchen2 = kitchenRepo.getKitchenById(2);
+		Kitchen kitchen3 = kitchenRepo.getKitchenById(3);
+		Kitchen kitchen4 = kitchenRepo.getKitchenById(4);
+		Assert.notNull(kitchen1, "kitchen1 must return a Kitchen.");
+		Assert.notNull(kitchen2, "kitchen2 must return a Kitchen.");
+		Assert.notNull(kitchen3, "kitchen3 must return a Kitchen.");
+		Assert.notNull(kitchen4, "kitchen4 must return a Kitchen.");
+		kitchen3.setPassword("New Test Password");
+		Kitchen saved = kitchenRepo.save(kitchen3);
+		Assert.isTrue(kitchen3.getPassword().equals("New Test Password"), "Kitchen3 must return a Kitchen.");
+	}
+	
+}

@@ -1,0 +1,15 @@
+package com.kitchen.repositories;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.kitchen.models.Kitchen;
+
+@Repository(value = "KitchenRepo")
+public interface KitchenRepo extends CrudRepository<Kitchen, Long> {
+	
+	@Query("SELECT k FROM kitchen k WHERE k.id = :id")
+	public Kitchen getKitchenById(long id);
+	
+}

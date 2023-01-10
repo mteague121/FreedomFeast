@@ -1,0 +1,89 @@
+package com.kitchen.controllers;
+
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import com.kitchen.services.*;
+import com.kitchen.models.*;
+
+@RestController
+@RequestMapping("/API")
+@CrossOrigin
+public class KitchenController {
+
+	@Autowired 
+	KitchenService kitchenService;
+
+	@Autowired 
+	ProductService productService;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@GetMapping
+	public ResponseEntity<?> test() {
+		return ResponseEntity.ok("This is an api test!");
+	}
+	
+	@GetMapping("/product/{id}")
+	public ResponseEntity<?> getProduct(@PathVariable("id") int id) {
+		Product product = productService.getProduct(id);
+		return ResponseEntity.ok(product);
+	}
+	
+	@GetMapping("/product/find/{name}")
+	public ResponseEntity<?> getProduct(@PathVariable("name") String name) {
+		Product product = productService.getProduct(name);
+		return ResponseEntity.ok(product);
+	}
+	
+	@PostMapping("/product")
+	public ResponseEntity<?> addProduct(@RequestBody Product product) {
+		Product result = productService.addProduct(product);
+		return ResponseEntity.ok("added product: " + result);
+	}
+	
+	@GetMapping("/kitchen")
+	public ResponseEntity<?> getKitchen() {
+		return ResponseEntity.ok(kitchenService.getRandomKitchens());
+	}
+	
+	@GetMapping("/kitchen/{id}")
+	public ResponseEntity<?> getKitchen(@PathVariable("id") int id) {
+		Kitchen kitchen = kitchenService.getKitchen(id);
+		kitchen.setMenus(kitchen.getMenus());
+		return ResponseEntity.ok(kitchen);
+	}
+	
+	@PostMapping("/kitchen")
+	public ResponseEntity<?> addKitchen(@RequestBody Kitchen kitchen) {
+		System.out.println(kitchen);
+		if (kitchenService.getKitchen(kitchen.getEmail()) == null) {
+			for(int i = 0; i < kitchen.getMenuItems().size(); i++) {
+				Product product = kitchen.getMenuItems().get(i);
+				productService.addProduct(product);
+			}
+			Kitchen result = kitchenService.addKitchen(kitchen);
+			return ResponseEntity.ok("added kitchen: " + kitchen);
+		} else {
+			Kitchen secure = kitchenService.getKitchen(kitchen.getEmail());
+			if (passwordEncoder.encode(kitchen.getPassword()).equals(secure.getPassword())) {
+				kitchenService.saveKitchen(kitchen);
+				return ResponseEntity.ok("updated kitchen: " + secure);
+			} else {
+				return ResponseEntity.badRequest().body("Invalid password");
+			}
+		}
+	}
+	
+	@GetMapping("/kitchen/{id}/image")
+	public ResponseEntity<?> getKitchenImage(@PathVariable("id") int id) {
+		Kitchen kitchen = kitchenService.getKitchen(id);
+		return ResponseEntity.ok(kitchen.getImage());
+	}
+	
+}

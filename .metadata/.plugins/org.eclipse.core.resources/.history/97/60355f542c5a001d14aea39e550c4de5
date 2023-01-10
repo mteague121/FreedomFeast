@@ -1,0 +1,31 @@
+package com.kitchen.models;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.*;
+
+import com.consumer.models.Customer;
+
+import lombok.*;
+
+// TODO: Set the correct table name for entity
+@Entity
+@AllArgsConstructor
+@Getter
+public class Order {
+
+	@GeneratedValue
+	@Id
+	private long id;
+	@OneToOne
+	//@JoinColumn
+	//private Customer customer;
+	@Setter
+	private String status;
+	@Setter
+	private List<Product> items;
+	@Setter
+	private Date createdAt;
+	
+}

@@ -1,0 +1,107 @@
+package com.kitchen.models;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.consumer.dao.ConsumerDao;
+import com.kitchen.repositories.ProductRepo;
+
+@Entity
+@Table(name = "order")
+public class Order {
+	
+	@Autowired
+	@Transient
+	ProductRepo productRepo;
+	
+	@Autowired
+	@Transient
+	ConsumerDao consumerRepo;
+	
+	@Id
+	long id;
+
+	String consumerId;
+	String status;
+	String items;
+	String createdAt;
+	
+	public Order() {
+		
+	}
+	
+	public Order(String consumerId, String status, String items, String createdAt) {
+		this.consumerId = consumerId;
+		this.status = status;
+		this.items = items;
+		this.createdAt = createdAt;
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getConsumerId() {
+		return consumerId;
+	}
+
+	public void setConsumerId(String consumerId) {
+		this.consumerId = consumerId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getItems() {
+		return items;
+	}
+
+	public void setItems(String items) {
+		this.items = items;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+	
+	public String toString() {
+		return consumerId + " | " + items;
+	}
+	
+	public void printRecepit() {
+		System.out.println("----------------------------");
+		System.out.println("----------RECEPIT-----------");
+		System.out.println();
+		System.out.println("Date & Time:" + createdAt);
+		System.out.println("Name:" + consumerRepo.getById(id));
+		System.out.println("Order Items:");
+		String[] list = items.split(" ");
+		double total = 0;
+		for(int i = 0; i < list.length; i++) {
+			String name = productRepo.getById(Integer.parseInt(list[i])).getName();
+			double price = Double.parseDouble(productRepo.getById(Integer.parseInt(list[i])).getName());
+			System.out.println((i+1) + ". " + name + "   " + price);
+			total = total + price;
+		}
+		System.out.println("Total Price: $" + total);
+		System.out.println("----------------------------");
+	}
+	
+}

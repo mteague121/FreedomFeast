@@ -1,0 +1,21 @@
+package com.kitchen.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.kitchen.services.KitchenService;
+
+@RestController
+//@RequestMapping("/API")
+public class KitchenController {
+
+	@Autowired 
+	KitchenService kitchenService;
+	
+	@GetMapping
+	public ResponseEntity<?> test() {
+		return ResponseEntity.ok("Hello!");
+	}
+	
+}

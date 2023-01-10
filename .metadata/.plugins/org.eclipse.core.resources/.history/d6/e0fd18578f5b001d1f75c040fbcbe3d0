@@ -1,0 +1,77 @@
+package com.kitchen.controllers;
+
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.kitchen.services.*;
+import com.kitchen.models.*;
+
+@RestController
+@RequestMapping("/API")
+public class KitchenController {
+
+	@Autowired 
+	KitchenService kitchenService;
+
+	@Autowired 
+	ProductService productService;
+	
+	@GetMapping
+    @CrossOrigin
+	public ResponseEntity<?> test() {
+		return ResponseEntity.ok("This is an api test!");
+	}
+	
+	@GetMapping("/product/{id}")
+    @CrossOrigin
+	public ResponseEntity<?> getProduct(@PathVariable("id") int id) {
+		Product product = productService.getProduct(id);
+		return ResponseEntity.ok(product);
+	}
+	
+	@PostMapping("/product")
+    @CrossOrigin
+	public ResponseEntity<?> addProduct(@RequestBody Product product) {
+		Product result = productService.addProduct(product);
+		return ResponseEntity.ok("added product: " + result);
+	}
+	
+	@GetMapping("/kitchen")
+    @CrossOrigin
+	public ResponseEntity<?> getKitchen() {
+		List<Kitchen> kitchens = new ArrayList<Kitchen>();
+		kitchens.add(kitchenService.getKitchen(1));
+		kitchens.add(kitchenService.getKitchen(2));
+		kitchens.add(kitchenService.getKitchen(3));
+		kitchens.add(kitchenService.getKitchen(4));
+		kitchens.add(kitchenService.getKitchen(5));
+		kitchens.add(kitchenService.getKitchen(6));
+		return ResponseEntity.ok(kitchens);
+	}
+	
+	@GetMapping("/kitchen/{id}")
+    @CrossOrigin
+	public ResponseEntity<?> getKitchen(@PathVariable("id") int id) {
+		Kitchen kitchen = kitchenService.getKitchen(id);
+		kitchen.setMenus(kitchen.getMenus());
+		return ResponseEntity.ok(kitchen);
+	}
+	
+	@PostMapping("/kitchen")
+    @CrossOrigin
+	public ResponseEntity<?> addKitchen(@RequestBody Kitchen kitchen) {
+		Kitchen result = kitchenService.addKitchen(kitchen);
+		return ResponseEntity.ok("added kitchen: " + result);
+	}
+	
+	@GetMapping("/kitchen/{id}/image")
+    @CrossOrigin
+	public ResponseEntity<?> getKitchenImage(@PathVariable("id") int id) {
+		Kitchen kitchen = kitchenService.getKitchen(id);
+		return ResponseEntity.ok(kitchen.getImage());
+	}
+	
+}

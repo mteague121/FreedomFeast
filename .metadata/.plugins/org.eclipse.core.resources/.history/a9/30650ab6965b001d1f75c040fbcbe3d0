@@ -1,0 +1,31 @@
+package com.kitchen.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kitchen.models.Kitchen;
+import com.kitchen.models.Product;
+import com.kitchen.repositories.ProductRepo;
+
+@Service
+public class ProductService {
+
+	@Autowired
+	ProductRepo productRepo;
+	
+	public Product getProduct(int id) {
+		return productRepo.getProductById(id);
+	}
+	
+	public Product addProduct(Product product) {
+		return productRepo.save(product);
+	}
+	
+	public List<Product> getList()
+	{
+		List<Product> list= (List<Product>) productRepo.findAll();
+		return list;
+	}
+}

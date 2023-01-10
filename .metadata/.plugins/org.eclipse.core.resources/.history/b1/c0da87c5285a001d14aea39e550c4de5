@@ -1,0 +1,18 @@
+package com.main.application;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+import com.kitchen.repositories.KitchenRepo;
+
+@SpringBootApplication
+public class FreedomFeastApplication {
+
+	public static void main(String[] args) {
+		ApplicationContext ctx = SpringApplication.run(FreedomFeastApplication.class, args);
+		KitchenRepo repo = (KitchenRepo) ctx.getBean("KitchenRepo");
+		System.out.println(repo.count());
+	}
+
+}

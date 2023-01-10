@@ -1,0 +1,49 @@
+package com.kitchen.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kitchen.models.*;
+import com.kitchen.repositories.KitchenRepo;
+
+
+@Service
+public class KitchenService {
+	
+	@Autowired
+	KitchenRepo kitchenRepo;
+	
+	public Kitchen testRepo() {
+		return kitchenRepo.getKitchenById(1);
+	}
+	
+	public void saveKitchens(List<Kitchen> kitchens) {
+		kitchenRepo.saveAll(kitchens);
+	}
+	
+	public Kitchen saveKitchen(Kitchen kitchen) {
+		return kitchenRepo.save(kitchen);
+	}
+	
+	public Kitchen getKitchen(long id) {
+		return kitchenRepo.getKitchenById(id);
+	}
+	
+	public Product addProductToKitchen(Product product, Kitchen kitchen) {
+		kitchen.getMenu().add(product);
+		saveKitchen(kitchen);
+		return product;
+	}
+	
+	public void removeProductFromKitchen(Product product, Kitchen kitchen) {
+		kitchen.getMenu().remove(product);
+		saveKitchen(kitchen);
+	}
+	
+	public void changeImageURLForKitchen(Kitchen kitchen, String imageURL) {
+		kitchen.setImageURL(imageURL);
+		saveKitchen(kitchen);
+	}
+}

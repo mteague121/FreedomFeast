@@ -1,0 +1,26 @@
+package com.SES.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.web.bind.annotation.*;
+import com.SES.service.MailService;
+
+@RestController
+public class MailController {
+    
+    @Autowired
+    private MailService mailService;
+
+    //this function should get called whenever a customer makes an order
+    @PostMapping("/sendMail/{email}")
+    public String sendMessage(@PathVariable("email") String toEmail, @RequestBody String context) {
+    	System.out.println("Hello");
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("freedomfeast@gmail.com");
+        message.setTo(toEmail);
+        message.setSubject("Freedom Feast Update"); //consider putting this in a different file and avoid manually setting it
+        message.setText(context);  //same
+        mailService.sendMessage(message);
+        return "Email sent successfully!";
+    }
+}

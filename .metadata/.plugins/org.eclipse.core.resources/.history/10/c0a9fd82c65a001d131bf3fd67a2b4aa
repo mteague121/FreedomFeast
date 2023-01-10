@@ -1,0 +1,88 @@
+package com.kitchen.models;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.stereotype.Component;
+
+@Entity
+@Table(name = "kitchen")
+public class Kitchen {
+	
+	@Id
+	int id;
+
+	String name;
+	String workingdays;
+	String workingtimes;
+	String image;
+	String menus;
+	
+	public Kitchen() {
+		
+	}
+	
+	public Kitchen(String name, String workingdays, String workingtimes, String image, String menus) {
+		this.name = name;
+		this.workingdays = workingdays;
+		this.workingtimes = workingtimes;
+		this.image = image;
+		this.menus = menus;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getWorkingdays() {
+		return workingdays;
+	}
+
+	public void setWorkingdays(String workingdays) {
+		this.workingdays = workingdays;
+	}
+
+	public String getWorkingtimes() {
+		return workingtimes;
+	}
+
+	public void setWorkingtimes(String workingtimes) {
+		this.workingtimes = workingtimes;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getMenus() {
+		return menus;
+	}
+
+	public void setMenus(String menus) {
+		this.menus = menus;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+}

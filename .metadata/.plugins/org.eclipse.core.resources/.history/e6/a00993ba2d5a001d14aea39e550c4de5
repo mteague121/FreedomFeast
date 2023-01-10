@@ -1,0 +1,22 @@
+package com.main.application;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.kitchen.services.KitchenService;
+
+@RestController
+//@RequestMapping("/API")
+public class APIController {
+
+	@Autowired 
+	KitchenService kitchenService;
+	
+	@GetMapping("/test")
+	public ResponseEntity<?> testAPI() {
+		System.out.println("Hello!");
+		return ResponseEntity.ok("Test passed! " + kitchenService.testRepo());
+	}
+	
+}

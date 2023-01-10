@@ -1,0 +1,40 @@
+package com.consumer.restImpl;
+
+import java.util.Map;
+import com.consumer.rest.ConsumerRest;
+import com.consumer.services.ConsumerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ConsumerRestImpl implements ConsumerRest {
+
+    @Autowired
+    ConsumerService consumerService;
+
+    @Override
+    public ResponseEntity<String> signUp(Map<String, String> requestMap) {
+        try {
+        	ResponseEntity<String> response = consumerService.signUp(requestMap);
+        	
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<String>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Override
+    public ResponseEntity<String> login(Map<String, String> requestMap) {
+        try{
+            return consumerService.login(requestMap);
+        } catch (Exception e) {
+            e.printStackTrace(); 
+        }
+        return new ResponseEntity<String>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+}

@@ -1,0 +1,23 @@
+package com.kitchen.repositories;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.kitchen.models.Kitchen;
+
+@Repository
+public interface KitchenRepo extends CrudRepository<Kitchen, Long> {
+	
+	public Kitchen getKitchenById(long id);
+
+	public Kitchen getKitchenByEmail(String email);
+
+	public Kitchen findKitchenByName(String name);
+	
+	@Query(nativeQuery = true, value = "SELECT k FROM kitchen k ORDER BY RAND() LIMIT 8")
+	public List<Kitchen> getRandomKitchens();
+	
+}

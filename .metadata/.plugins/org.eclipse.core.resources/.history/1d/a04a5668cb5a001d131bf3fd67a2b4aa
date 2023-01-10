@@ -1,0 +1,5 @@
+package com.kitchen.services;
+
+public class ProductService {
+
+}

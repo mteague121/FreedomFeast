@@ -1,0 +1,76 @@
+package com.kitchen;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+
+import com.kitchen.models.Kitchen;
+import com.kitchen.models.Product;
+import com.kitchen.services.KitchenService;
+import com.kitchen.services.ProductService;
+import com.main.application.FreedomFeastApplication;
+
+@SpringBootTest(classes = FreedomFeastApplication.class)
+public class KitchenTests {
+
+	@Autowired
+	KitchenService kService;
+	@Autowired
+	ProductService pService;
+	
+//	@BeforeEach
+//	void setUp() {
+//		List<Kitchen> listKit=kService.getList();
+//		System.out.println(listKit);
+//	}
+	
+	@Test
+	public void getInfoTests() {
+		List<Kitchen> listKit=kService.getList();
+		System.out.println(listKit);
+	}
+	
+	@Test
+	public void saveKitchenTest() {
+		Kitchen kitchen = new Kitchen(9, "Sushi Rest", "kitchen", "9@gmail.com", "112358", "All", "All", "image_url", "7 8 9");
+		kService.saveKitchen(kitchen);
+		List<Kitchen> listKit=kService.getList();
+		System.out.println(listKit);
+	}
+	
+	@Test
+	public void deleteKitchenTest() {
+		List<Kitchen> listKit=kService.getList();
+		kService.deleteKitchen(listKit.get(listKit.size()-1).getId());
+		System.out.println(listKit);
+	}
+	
+	@Test
+	public void getKitchenMenuTests() {
+		List<Kitchen> listKit=kService.getList();
+		String kitchen_1 = listKit.get(0).getMenus();
+		String kitchen_2 = listKit.get(1).getMenus();
+		System.out.println(kitchen_1);
+		String[] k1 = kitchen_1.split(" ");
+		String[] k2 = kitchen_2.split(" ");
+		List<Product> listPro = pService.getList();
+		System.out.println("Kitchen 1 contains:");
+		for(int i = 0; i < k1.length; i++) {
+			int x = Integer.parseInt(k1[i])-1;
+			System.out.println(listPro.get(x));
+		}
+		System.out.println(kitchen_2);
+		System.out.println("Kitchen 2 contains:");
+		for(int i = 0; i < k2.length; i++) {
+			int x = Integer.parseInt(k2[i])-1;
+			System.out.println(listPro.get(x));
+		}
+	}
+}

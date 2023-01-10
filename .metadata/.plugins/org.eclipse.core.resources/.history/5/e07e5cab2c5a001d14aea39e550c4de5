@@ -1,0 +1,91 @@
+package com.kitchen.models;
+
+import java.util.List;
+
+import javax.persistence.*;
+
+// TODO: Set the correct table name for entity
+@Entity
+public class Kitchen {
+
+	@GeneratedValue
+	@Id
+	private long id;
+	private String name;
+	private String email;
+	private String password;
+	private String workingDays;
+	private String workingTime;
+	private String imageURL;
+	private List<Product> menu;
+	
+	@Override
+	public String toString() {
+		return id + ": " + name + " (" + password + " on " + email + ") open " + workingDays
+		 + ", " + workingTime + ". Displaying " + imageURL + ". Menu: " + menu;
+	}
+	
+	public Kitchen() {
+		super();
+	}
+
+	public Kitchen(long id, String name, String email, String password, String workingDays, 
+	 String workingTime, String imageURL, List<Product> menu) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.workingDays = workingDays;
+		this.workingTime = workingTime;
+		this.imageURL = imageURL;
+		this.menu = menu;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getWorkingDays() {
+		return workingDays;
+	}
+	public void setWorkingDays(String workingDays) {
+		this.workingDays = workingDays;
+	}
+	public String getWorkingTime() {
+		return workingTime;
+	}
+	public void setWorkingTime(String workingTime) {
+		this.workingTime = workingTime;
+	}
+	public String getImageURL() {
+		return imageURL;
+	}
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+	public List<Product> getMenu() {
+		return menu;
+	}
+	public void setMenu(List<Product> menu) {
+		this.menu = menu;
+	}
+	public long getId() {
+		return id;
+	}
+	
+}

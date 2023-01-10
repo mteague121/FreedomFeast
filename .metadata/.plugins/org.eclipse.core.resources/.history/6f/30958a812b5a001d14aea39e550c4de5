@@ -1,0 +1,16 @@
+package com.main.application;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+
+@SpringBootApplication
+@ComponentScan(basePackages = { "com.kitchen", "com.consumer", "com.kitchen.repositories" })
+public class FreedomFeastApplication {
+
+	public static void main(String[] args) {
+		ApplicationContext ctx = SpringApplication.run(FreedomFeastApplication.class, args);
+	}
+
+}

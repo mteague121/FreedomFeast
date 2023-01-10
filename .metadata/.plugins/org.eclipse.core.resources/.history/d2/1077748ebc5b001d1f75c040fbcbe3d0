@@ -1,0 +1,125 @@
+package com.consumer;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.consumer.models.Consumer;
+import com.consumer.services.ConsumerService;
+import com.kitchen.models.Kitchen;
+import com.kitchen.services.KitchenService;
+import com.kitchen.services.ProductService;
+import com.main.application.FreedomFeastApplication;
+
+@SpringBootTest(classes = FreedomFeastApplication.class)
+public class ConsumerTests {
+	@Autowired
+	KitchenService kService;
+	
+	@Autowired
+	ProductService pService;
+	
+	@Autowired
+	ConsumerService cService;
+	
+	private List<Consumer> listConsumer;
+	
+	@BeforeEach
+	public void getInfo() {
+		List<Consumer> listCon=cService.getList();
+		this.listConsumer = listCon;
+		System.out.println(listCon);
+	}
+	
+	@Test
+	public void validateId() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getId(), 1);
+	}
+	
+	@Test
+	public void validateFirstName() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getFirstName(), "William");
+	}
+	
+	@Test
+	public void validateLastName() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getLastName(), "Hu");
+	}
+	
+	@Test
+	public void validateRole() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getRole(), "consumer");
+	}
+	
+	@Test
+	public void validateEmail() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getEmail(), "weibin.hu.7@gmail.com");
+	}
+	
+	@Test
+	public void validatePassword() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getPassword(), "112358");
+	}
+	
+	@Test
+	public void validateSecurityQuestion1() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getFirstSecurityQuestion(), "Color");
+		assertEquals(c.getFirstSecurityAnswer(), "Blue");
+	}
+	
+	@Test
+	public void validateSecurityQuestion2() {
+		Consumer c = listConsumer.get(0);
+		assertEquals(c.getSecondSecurityQuestion(), "Number");
+		assertEquals(c.getSecondSecurityAnswer(), "7");
+	}
+	
+	@Test
+	public void getInfoTests() {
+		System.out.println(listConsumer);
+	}
+	
+	@Test
+	public void saveConsumerTests() {
+		int id = 3;
+		String fname = "MMM";
+		String lname = "HAHAHA";
+		String role = "consumer";
+		String email = "MMM@gmail.com";
+		String password = "112358";
+		String fsq = "Color";
+		String ssq = "Number";
+		String fsa = "White";
+		String ssa = "6";
+		Consumer c = new Consumer(id, fname, lname, role,
+				email, password, fsq, ssq, fsa, ssa);
+		cService.saveConsumer(c);
+		List<Consumer> listCon=cService.getList();
+		System.out.println(listCon);
+	}
+	
+	@Test
+	public void deleteConsumerTest() {
+		cService.delete(listConsumer.get(listConsumer.size()-1).getId());
+		System.out.println(listConsumer);
+	}
+	
+	@Test
+	public void createOrderTest() {
+		Order order = new Order();
+		order.setConsumerId("1");
+	}
+	
+}

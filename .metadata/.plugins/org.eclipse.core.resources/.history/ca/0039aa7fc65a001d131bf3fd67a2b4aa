@@ -1,0 +1,12 @@
+package com.kitchen.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.kitchen.models.Kitchen;
+import com.kitchen.models.Product;
+
+@Repository
+public interface ProductRepo extends JpaRepository<Product, Integer>{
+
+}

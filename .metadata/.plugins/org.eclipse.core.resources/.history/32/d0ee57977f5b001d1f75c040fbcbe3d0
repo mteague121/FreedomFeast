@@ -1,0 +1,29 @@
+package com.consumer.services;
+
+import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.kitchen.models.*;
+import com.kitchen.services.DeliveryService;
+
+@Service
+public class FinanceService {
+	
+	@Autowired
+	DeliveryService deliveryService;
+	
+	public Order getOrderFromId(long id) {
+		return deliveryService.getOrderFromId(id);
+	}
+	
+	// TODO: create simpler methods of this
+	public int getTotalOrdersForKitchen(Kitchen kitchen, Date startDate, Date endDate) {
+		return -1;
+	}
+	
+	// TODO: create simpler methods of this
+	public int getTotalGrossIncomeForKitchen(Kitchen kitchen, Date startDate, Date endDate) {
+		return -1;
+	}
+	
+}

@@ -1,0 +1,65 @@
+package com.kitchen.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.consumer.models.Consumer;
+//import com.consumer.models.Cart;
+import com.kitchen.models.Order;
+import com.kitchen.repositories.OrderRepo;
+
+@Service
+public class DeliveryService {
+	
+	@Autowired
+	OrderRepo oRepo;
+	
+	public Order getOrderFromId(long id) {
+		return null;
+	}
+	
+	// TODO: change String type to Cart type
+	public Order createOrderFromCart(String cart) {
+		return null;
+	}
+	
+	public Order createOrder(Order order) {
+		return null;
+	}
+	
+	/// REPORTING METHODS
+	
+	// TODO: We could mark orders as printed or not to make this method work as per user-stories
+	public List<Order> getOrderReport() {
+		return null;
+	}
+	
+	// specifically asked for user-story-samples
+	public List<Order> sortOrdersBySubmissionTime(List<Order> orders) {
+		return null;
+	}
+	
+	// TODO: change from void type to a label type
+	// honestly I have no idea what to do to mimic this IRL
+	public void printPackingLabels() {
+		return;
+	}
+	
+	// We need to update the order with a tracking number for a seperate delivery object
+	public Order assignTrackingNumber() {
+		return null;
+	}
+	
+	public void saveOrder(Order o)
+	{
+		oRepo.save(o);
+	}
+	
+	public List<Order> getList(){
+		List<Order> list = oRepo.findAll();
+		return list;
+	}
+	
+}

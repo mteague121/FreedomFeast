@@ -1,0 +1,72 @@
+package com.kitchen.repositories;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
+import java.util.*;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import com.kitchen.models.*;
+import com.kitchen.services.*;
+
+@ExtendWith(MockitoExtension.class)
+@Configuration
+@EnableJpaRepositories
+public class RepositoryTests {
+	
+	@Mock
+	Kitchen kitchen
+	
+	@Mock
+	KitchenRepo kitchenRepo;
+	
+	private Kitchen generateRandomKitchen(long id) {
+		String names[] = {"Big Kitches", "Smoke shack", "Lil fishies", "Le Front"};
+		String passwords[] = {"bigword4", "bigword5", "bigword64", "bigword1"};
+		String workdays[] = {"M-F", "Tu-Sat", "Everyday", "Th-M"};
+		String worktimes[] = {"10AM-10PM", "7AM-11PM", "24H", "1PM-3AM"};
+		Random rand = new Random();
+		Kitchen kitchen = new Kitchen(id, names[rand.nextInt(0, names.length)], "test@test.test",
+		 passwords[rand.nextInt(0, passwords.length)], workdays[rand.nextInt(0, workdays.length)],
+		 worktimes[rand.nextInt(0, worktimes.length)], "test", null);
+		System.out.println("Created: " + kitchen);
+		return kitchen;
+	}
+	
+	private List<Kitchen> generateKitchens() {
+		List<Kitchen> kitchens = new ArrayList<Kitchen>();
+		kitchens.add(generateRandomKitchen(1));
+		kitchens.add(generateRandomKitchen(2));
+		kitchens.add(generateRandomKitchen(3));
+		kitchens.add(generateRandomKitchen(4));
+		return kitchens;
+	}
+	
+	@BeforeEach
+	public void repoSetup() {
+		List<Kitchen> kitchens = generateKitchens();
+		kitchenRepo.saveAll(kitchens);
+	}
+	
+	@Test
+	public void performKitchenLogic() {
+		when(kitchenRepo.getKitchenById(3)).thenReturn(generateRandomKitchen(3));
+		when(kitchenRepo.save(any())).thenReturn(AdditionalAnswers.returnsFirstArg());
+		Kitchen kitchen3 = kitchenRepo.getKitchenById(3);
+		System.out.println(kitchen3);
+		kitchen3.setPassword("New Test Password");
+		Kitchen saved = kitchenRepo.save(kitchen3);
+		System.out.println(saved.getPassword());
+	}
+	
+}

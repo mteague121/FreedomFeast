@@ -1,0 +1,16 @@
+spring.datasource.url=jdbc:mysql://feast.c7piaupanvpg.us-east-1.rds.amazonaws.com:3306/feastfreedom
+spring.datasource.username=admin
+spring.datasource.password=1123581321
+
+spring.jpa.show-sql=true
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
+spring.jpa.hibernate.ddl-auto=none
+
+cloud.aws.credentials.access-key=AKIAXYEZ3AVWVBKJGSGP
+cloud.aws.credentials.secret-key=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
+cloud.aws.region.static=us-east-1
+cloud.aws.stack.auto=false
+
+spring.servlet.multipart.max-file-size=100MB
+spring.servlet.multipart.max-request-size=100MB

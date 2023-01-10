@@ -1,0 +1,81 @@
+package com.kitchen.services;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.kitchen.models.*;
+import com.kitchen.repositories.*;
+
+
+@Service
+public class KitchenService {
+	
+	@Autowired
+	KitchenRepo kitchenRepo;
+	
+	@Autowired
+	ProductRepo productRepo;
+	
+	private void setupKitchenItems(Kitchen kitchen) {
+		Scanner scnr = new Scanner(kitchen.getMenus());
+		List<Product> products = new ArrayList<Product>();
+		while(scnr.hasNext()) {
+			try {
+				int id = scnr.nextInt();
+				Product product = productRepo.getProductById(id);
+				System.out.println(product);
+				products.add(product);
+			} catch (Exception e) {
+				if (scnr.hasNext()) scnr.next();
+			}
+		}
+		scnr.close();
+		kitchen.setMenuItems(products);
+	}
+	
+	private void serializeProducts(Kitchen kitchen) {
+		kitchen.setMenuItems(kitchen.getMenuItems());
+	}
+	
+	public void saveKitchens(List<Kitchen> kitchens) {
+		kitchenRepo.saveAll(kitchens);
+	}
+	
+	public Kitchen saveKitchen(Kitchen kitchen) {
+		return kitchenRepo.save(kitchen);
+	}
+	
+	public Kitchen getKitchen(long id) {
+		Kitchen kitchen = kitchenRepo.getKitchenById(id);
+		setupKitchenItems(kitchen);
+		return kitchen;
+	}
+	
+	public Kitchen addKitchen(Kitchen kitchen) {
+		return saveKitchen(kitchen);
+	}
+	
+	public Product addProductToKitchen(Product product, Kitchen kitchen) {
+		List<Product> newMenu = kitchen.getMenuItems();
+		newMenu.add(product);
+		kitchen.setMenuItems(newMenu);
+		saveKitchen(kitchen);
+		return product;
+	}
+	
+	public void removeProductFromKitchen(Product product, Kitchen kitchen) {
+		List<Product> newMenu = kitchen.getMenuItems();
+		newMenu.remove(product);
+		kitchen.setMenuItems(newMenu);
+		saveKitchen(kitchen);
+	}
+	
+	public void changeImageURLForKitchen(Kitchen kitchen, String imageURL) {
+		kitchen.setImage(imageURL);
+		saveKitchen(kitchen);
+	}
+}

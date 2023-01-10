@@ -1,0 +1,13 @@
+package com.consumer.dao;
+
+import com.consumer.models.Consumer;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ConsumerDao extends JpaRepository<Consumer, Integer> {
+	@Query("SELECT c FROM talliban c WHERE c.email = :email")
+    Consumer findByEmail(String email);
+}

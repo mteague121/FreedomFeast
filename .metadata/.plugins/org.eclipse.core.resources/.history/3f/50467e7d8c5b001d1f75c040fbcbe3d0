@@ -1,0 +1,13 @@
+package com.kitchen.services;
+
+import java.io.File;
+
+import org.springframework.web.multipart.MultipartFile;
+
+public interface FileService {
+
+    public String uploadFile(File file);
+
+    
+}
+ 

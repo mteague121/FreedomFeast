@@ -1,0 +1,157 @@
+package com.consumer.services;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import com.consumer.JWT.ConsumerUsersDetails;
+import com.consumer.JWT.JwtUtil;
+import com.consumer.dao.ConsumerDao;
+import com.consumer.models.*;
+import com.kitchen.models.*;
+
+@Service
+public class ConsumerService {
+	
+	@Autowired
+	ConsumerDao consumerDao;
+	
+	@Autowired
+	AuthenticationManager authenticationManager;
+
+	@Autowired
+	ConsumerUsersDetails consumerUsersDetails;
+
+	@Autowired
+	JwtUtil jwtUtil;
+	
+	public ResponseEntity<String> signUp(Map<String, String> requestMap) {
+		try{
+			if (validateSignupMap(requestMap)) {
+				Consumer consumer = consumerDao.findByEmail(requestMap.get("email"));
+				if (Objects.isNull(consumer))  {
+					consumerDao.save(getConsumerFromMap(requestMap));
+					return new ResponseEntity<String>("{\"message\":\"Successful registration.\"}", HttpStatus.OK);
+				} else {
+					return new ResponseEntity<String>("{\"message\":\"Email already taken.\"}", HttpStatus.BAD_REQUEST);
+				}
+			} else {
+				return new ResponseEntity<String>("{\"message\":\"Invalid data.\"}", HttpStatus.BAD_REQUEST);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("{\"message\":\"Something went wrong.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	public ResponseEntity<String> login(Map<String, String> requestMap) {
+		try{
+			Authentication auth = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
+			); 
+			if (auth.isAuthenticated()) {
+				return new ResponseEntity<String>("{\"token\":\""+jwtUtil.generateToken(consumerUsersDetails.getConsumerDetails().getEmail(), consumerUsersDetails.getConsumerDetails().getPassword())+"\"}", HttpStatus.OK);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("{\"message\":\""+"Wrong credentials"+"\"}",HttpStatus.BAD_REQUEST);
+	}
+	
+	private boolean validateSignupMap(Map<String, String> requesMap) {
+		if (requesMap.containsKey("name") && requesMap.containsKey("email") && requesMap.containsKey("password")) {
+			return true;
+		}
+		return false;
+	}
+
+	private Consumer getConsumerFromMap(Map<String, String> requestMap) {
+		Consumer consumer = new Consumer();
+		consumer.setFirstName(requestMap.get("firstName"));
+		consumer.setLastName(requestMap.get("lastName"));
+		consumer.setEmail(requestMap.get("email"));
+		consumer.setPassword(requestMap.get("password"));
+		consumer.setFirstSecurityQuestion(requestMap.get("securityQuestion1"));
+		consumer.setSecondSecurityQuestion(requestMap.get("securityQuestion2"));
+		consumer.setFirstSecurityAnswer(requestMap.get("securityanswer1"));
+		consumer.setSecondSecurityAnswer(requestMap.get("securityanswer2"));
+		return consumer;
+	}
+
+
+	/// PRODUCT INFORMATION
+	public Product getProductFromId(long id) {
+		return null;
+	}
+	
+	// calls the other function, use this if someone removes an entire item from cart
+	public void removeProductFromCart(Product product, Cart cart) {
+		removeProductFromCart(product, cart, -1);
+	}
+	
+	// TODO: if the count is -1 remove the item immediately
+	public void removeProductFromCart(Product product, Cart cart, int count) {
+		
+	}
+	
+	// TODO: needs to check if item exists, add to cart if not, then set cart item amount
+	public Product setProductInCartAmount(Product product, Cart cart, int amount) {
+		return null;
+	}
+	
+	// TODO: This needs to check if the item exists in the cart, and add another if it does
+	public Product addProductToCart(Product product, Cart cart) {
+		return null;
+	}
+	
+	// use this to get a random set of products, or we could swap this out for getting a random
+	// set of kitchens in the area, as that might make more sense because customers shouldn't
+	// buy products from several different kitchens
+	public List<Product> getRandomProducts() {
+		return null;
+	}
+	
+	// TODO: we'll need more methods to receive kitchens and their info and to search for keywords
+	
+	/// SHIPPING AND TRACKING
+	
+	public Order getOrderFromId(long id) {
+		return null;
+	}
+	
+	// TODO: needs to check the customer by id, check for their most recent order, and then return
+	// if the order is still open (hasn't been delivered)
+	public Order getOrderFromCustomerId(long id) {
+		return null;
+	}
+	
+	public List<Consumer> getList()
+	{
+
+		List<Consumer> list=consumerDao.findAll();
+		return list;
+		
+	}
+	
+	public void saveConsumer(Consumer c)
+	{
+		consumerDao.save(c);
+	}
+	public Consumer get(long id)
+	{
+		return consumerDao.findById(id).get();
+	}
+	
+	public void delete(long id)
+	{
+		consumerDao.deleteById(id);
+	}
+	
+}

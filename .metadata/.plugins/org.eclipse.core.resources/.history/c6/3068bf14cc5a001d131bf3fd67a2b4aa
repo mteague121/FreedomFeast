@@ -1,0 +1,31 @@
+package com.kitchen.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.kitchen.services.*;
+import com.kitchen.models.*;
+
+@RestController
+@RequestMapping("/API")
+public class KitchenController {
+
+	@Autowired 
+	KitchenService kitchenService;
+
+	@Autowired 
+	ProductService productService;
+	
+	@GetMapping
+	public ResponseEntity<?> test() {
+		return ResponseEntity.ok("This is an api test!");
+	}
+	
+	@GetMapping("/product/{id}")
+	public ResponseEntity<?> getProduct(@PathVariable("id") long id) {
+		Product product = productService.getProduct(id);
+		return ResponseEntity.ok(product);
+	}
+	
+}
