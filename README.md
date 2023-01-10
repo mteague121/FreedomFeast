@@ -5,6 +5,6 @@ This project includes some features showcasing the teams abilities. We were assi
 
 Personally, I worked on most of the frontend (Angular folder) and some of the work on the backend server (the other folder). 
 
-The original project went live on AWS's EC2 instance for the backend, and AWS's S3 Buckets for the frontend. 
+The original project went live on AWS's EC2 instance for the backend, AWS's S3 Buckets for the frontend, and AWS's MySQL platform (I had no part in the database side).
 
 Some features included were signup/login authentication, menu and kitchen creation, a cart for logged in customers to add items to, and an email service which would email you about your account being created and whenever you would click the purchase button.
